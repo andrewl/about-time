@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Time</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,12 +38,12 @@
 <body>
   <h1>About Time</h1>
   <p id="message">Counts down the minutes until <em>about</em> the right amount time has passed</p>
-  <p id="setter">
-  <label for="minutes">Set timer for about </label>
-  <input type="number" id="minutes" min="1" max="240" value="5">
-  <span>minutes</span>
+  <div id="setter">
+    <p><label for="minutes">Set timer for about </label></p>
+    <p><input type="number" id="minutes" min="1" max="240" value="5"></p>
+    <p>minutes</p>
   <button id="startBtn">Start Timer</button>
-  </p>
+  </div>
 
   <audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
