@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- Link the manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2196f3">
+
+  <!-- App icons -->
+  <link rel="icon" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>About Time</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,72 +52,9 @@
   <button id="startBtn">Start Timer</button>
   </div>
 
-  <audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
-  <script>
-    const startBtn = document.getElementById('startBtn');
-    const minutesInput = document.getElementById('minutes');
-    const message = document.getElementById('message');
-    const alarmSound = document.getElementById('alarm');
-    const setter = document.getElementById('setter');
-
-    let timerInterval = null;
-    let remainingMinutes = 0;
-
-    // Request notification permission
-    if ('Notification' in window && Notification.permission !== 'granted') {
-      Notification.requestPermission();
-    }
-
-    startBtn.addEventListener('click', () => {
-      const minutes = parseInt(minutesInput.value, 10);
-
-      if (isNaN(minutes) || minutes < 1 || minutes > 240) {
-        alert('Please enter a valid number between 1 and 240.');
-        return;
-      }
-
-      // Clear any existing timer
-      if (timerInterval) clearInterval(timerInterval);
-
-      remainingMinutes = minutes;
-      updateMessage();
-      setter.style.display = 'none'; // Hide the input section
-
-      //set the value of one minute to be somewhere between 55 and 65 seconds
-      const oneMinuteInSeconds = Math.floor(Math.random() * (65 - 55 + 1)) + 55;
-
-      // Start the timer
-      timerInterval = setInterval(() => {
-        remainingMinutes--;
-
-        if (remainingMinutes > 0) {
-          updateMessage();
-        } else {
-          clearInterval(timerInterval);
-          timerInterval = null;
-          timerFinished();
-        }
-      }, oneMinuteInSeconds * 1000); 
-    });
-
-    function updateMessage() {
-      message.textContent = `About ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''} remaining`;
-    }
-
-    function timerFinished() {
-      message.textContent = `${minutes} minutes is about up!`;
-      alarmSound.play();
-
-      // Show browser notification if allowed
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Timer Finished!', {
-          body: 'Your timer has reached 0 minutes.',
-          icon: 'https://cdn-icons-png.flaticon.com/512/61/61112.png'
-        });
-      }
-    }
-  </script>
+  <script src="timer.js"></script>
 </body>
 </html>
 
