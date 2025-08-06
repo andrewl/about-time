@@ -26,10 +26,11 @@ startBtn.addEventListener('click', () => {
   }
 
   //one minute should be between 55 and 65 seconds
-  oneMinute = Math.floor(Math.random() * (65 - 55 + 1)) + 55;
+  const oneMinute = 1000 * Math.floor(Math.random() * (65 - 55 + 1)) + 55;
 
   endTime = Date.now() + minutes * oneMinute * 1000;
   localStorage.setItem('timerEnd', endTime);
+  localStorage.setItem('oneMinute', oneMinute);
 
 
   updateMessage();
@@ -40,6 +41,7 @@ startBtn.addEventListener('click', () => {
 function checkTimer() {
   const savedEndTime = parseInt(localStorage.getItem('timerEnd'), 10);
   if (!savedEndTime) return;
+  const oneMinute = parseInt(localStorage.getItem('oneMinute'), 10);
 
   const remaining = savedEndTime - Date.now();
   if (remaining <= 0) {
@@ -47,7 +49,7 @@ function checkTimer() {
     timerCheckInterval = null;
     timerFinished();
   } else {
-    const minutesLeft = Math.ceil(remaining / 60000);
+    const minutesLeft = Math.ceil(remaining / oneMinute);
     message.textContent = `About ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''} left`;
   }
 }
@@ -62,8 +64,9 @@ function updateMessage() {
       message.innerHTML = 'Counts down the minutes until <em>about</em> the right amount of time has passed';
       setter.style.display = 'block';
     } else {
+      const oneMinute = parseInt(localStorage.getItem('oneMinute'), 10);
       const remaining = savedEndTime - Date.now();
-      const minutesLeft = Math.ceil(remaining / 60000);
+      const minutesLeft = Math.ceil(remaining / oneMinute);
       message.textContent = `About ${minutesLeft} minute${minutesLeft !== 1 ? 's' : ''} left`;
       setter.style.display = 'none';
     }
