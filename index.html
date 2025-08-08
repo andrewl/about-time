@@ -2,14 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <!-- Link the manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2196f3">
-
-  <!-- App icons -->
-  <link rel="icon" sizes="192x192" href="icons/icon-192.png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>About Time</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,12 +37,12 @@
 <body>
   <h1>About Time</h1>
   <p id="message">Counts down the minutes until <em>about</em> the right amount time has passed</p>
-  <div id="setter">
-    <p><label for="minutes">Set timer for about </label></p>
-    <p><input type="number" id="minutes" min="1" max="240" value="5"></p>
-    <p>minutes</p>
+  <p id="setter">
+  <label for="minutes">Set timer for about </label>
+  <input type="number" id="minutes" min="1" max="240" value="5">
+  <span>minutes</span>
   <button id="startBtn">Start Timer</button>
-  </div>
+  </p>
 
   <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
