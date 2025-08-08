@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Time</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,21 +33,95 @@
       font-size: 2.5em;
       font-style: normal;
     }
+    #credits {
+      font-size: 0.8em;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
   <h1>About Time</h1>
   <p id="message">Counts down the minutes until <em>about</em> the right amount time has passed</p>
-  <p id="setter">
-  <label for="minutes">Set timer for about </label>
-  <input type="number" id="minutes" min="1" max="240" value="5">
-  <span>minutes</span>
+  <div id="setter">
+    <p><label for="minutes">Set timer for about </label></p>
+    <p><input type="number" id="minutes" min="1" max="240" value="5"></p>
+    <p>minutes</p>
   <button id="startBtn">Start Timer</button>
-  </p>
+  </div>
+  <div id="credits">
+    Alarm sound from <a href="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" target="_blank">Google Actions</a>.<br>
+    Icon by <a href="https://github.com/iconoir-icons/iconoir/blob/main/LICENSE" target="_blank">Iconoir</a>.<br>
+  </div>
 
-  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+  <audio id="alarm" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
-  <script src="timer.js"></script>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const minutesInput = document.getElementById('minutes');
+    const message = document.getElementById('message');
+    const alarmSound = document.getElementById('alarm');
+    const setter = document.getElementById('setter');
+    var minutes;
+
+    let timerInterval = null;
+    let remainingMinutes = 0;
+
+    // Request notification permission
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    startBtn.addEventListener('click', () => {
+      minutes = parseInt(minutesInput.value, 10);
+
+      if (isNaN(minutes) || minutes < 1 || minutes > 240) {
+        alert('Please enter a valid number between 1 and 240.');
+        return;
+      }
+
+      // Clear any existing timer
+      if (timerInterval) clearInterval(timerInterval);
+
+      remainingMinutes = minutes;
+      updateMessage();
+      setter.style.display = 'none'; // Hide the input section
+
+      //set the value of one minute to be somewhere between 55 and 65 seconds
+      const oneMinuteInSeconds = Math.floor(Math.random() * (65 - 55 + 1)) + 55;
+
+      // Start the timer
+      timerInterval = setInterval(() => {
+        remainingMinutes--;
+
+        if (remainingMinutes > 0) {
+          updateMessage();
+        } else {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          timerFinished();
+        }
+      }, oneMinuteInSeconds * 1000); 
+    });
+
+    function updateMessage() {
+      message.textContent = `About ${remainingMinutes} minute${remainingMinutes !== 1 ? 's' : ''} remaining`;
+    }
+
+    function timerFinished() {
+
+      const finalMessage = `${minutes} minutes is about up!`;
+      message.textContent = finalMessage;
+      alarmSound.play();
+
+      // Show browser notification if allowed
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('About Time', {
+          body: finalMessage,
+          image: "./alarm.svg"
+        });
+      }
+    }
+  </script>
 </body>
 </html>
 
