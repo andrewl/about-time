@@ -109,7 +109,7 @@
 
     function timerFinished() {
 
-      const finalMessage = `${minutes} minutes is about up!`;
+      const finalMessage = `${minutes} minute${remainingMinutes !== 1 ? 's' : ''} is about up!`;
       message.textContent = finalMessage;
       alarmSound.play();
 
@@ -117,7 +117,7 @@
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('About Time', {
           body: finalMessage,
-          image: "./alarm.svg"
+          image: 'https://abouttime.andrewl.net/alarm.svg'
         });
       }
     }
